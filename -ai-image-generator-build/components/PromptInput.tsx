@@ -1,11 +1,17 @@
 'use client';
 
+import fetchSuggestionFormChatGPT from "@/lib/fetchSuggestionFormChatGPT";
 import { useState } from "react"
+import useSWR from 'swr';
 
 function PromptInput() {
   
   const [input,setInput]=useState("");
-    return (
+  
+  const {data: suggestion,isLoading ,mutate , isValidating }=useSWR('/api/suggestion', fetchSuggestionFormChatGPT ,{
+    revalidateOnFocus:false,
+  })
+  return (
     <div className=" m-10"><form className=" flex flex-col lg:flex-row shadow-md shadow-slate-400/10 border rounded-md lg:divide-x">
         <textarea value={input} onChange={(e)=> setInput(e.target.value)} placeholder="Enter a Prompt........"className=" flex-1 p-4 outline-none rounded-md"/>
         <button type="submit" className={`p-4 font-bold ${input ? ' bg-violet-500 text-white transition-colors duration-200':'text-gray-300 cursor-not-allowed'} `} disabled={!input}>Generate</button>
